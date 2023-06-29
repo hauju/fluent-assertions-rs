@@ -1,8 +1,10 @@
 use self::bool_assertion::BoolAssertion;
 use crate::assertions::string_assertion::StringAssertion;
 
+
 pub mod bool_assertion;
 pub mod string_assertion;
+pub mod numeric_assertion;
 
 
 pub trait ShouldString {
@@ -31,3 +33,4 @@ impl ShouldBool for bool {
         BoolAssertion::new(self)
     }
 }
+
