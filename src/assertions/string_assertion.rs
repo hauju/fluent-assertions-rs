@@ -8,6 +8,16 @@ impl<T: AsRef<str>> StringAssertion<T> {
         StringAssertion { value }
     }
 
+    pub fn be(&self, expected: &str) -> &Self {
+        assert!(
+            self.value.as_ref() == expected,
+            "Expected string to be '{}', but got '{}'",
+            expected,
+            self.value.as_ref()
+        );
+        self
+    }
+
     pub fn start_with(&self, prefix: &str) -> &Self {
         assert!(
             self.value.as_ref().starts_with(prefix),
