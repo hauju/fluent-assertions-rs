@@ -18,6 +18,33 @@ impl<T: AsRef<str>> StringAssertion<T> {
         self
     }
 
+    pub fn not_be(&self, expected: &str) -> &Self {
+        assert!(
+            self.value.as_ref() != expected,
+            "Expected string to not be '{}', but got '{}'",
+            expected,
+            self.value.as_ref()
+        );
+        self
+    }
+
+    pub fn be_empty(&self) -> &Self {
+        assert!(
+            self.value.as_ref().is_empty(),
+            "Expected string to be empty, but got '{}'",
+            self.value.as_ref()
+        );
+        self
+    }
+
+    pub fn not_be_empty(&self) -> &Self {
+        assert!(
+            !self.value.as_ref().is_empty(),
+            "Expected string to not be empty, but got empty string"
+        );
+        self
+    }
+
     pub fn start_with(&self, prefix: &str) -> &Self {
         assert!(
             self.value.as_ref().starts_with(prefix),
@@ -60,6 +87,8 @@ impl<T: AsRef<str>> StringAssertion<T> {
 
 #[cfg(test)]
 mod tests {
+    use rstest::*;
+
     use crate::assertions::ShouldString;
 
     #[test]
@@ -83,4 +112,20 @@ mod tests {
             .contain("EF")
             .have_length(9);
     }
+
+    #[rstest]
+    #[case(String::default())]
+    #[case(String::from(""))]
+    #[case("".to_string())]
+    fn should_be_empty(#[case] input: String) {
+        input.should().be_empty();
+    }
+
+    #[rstest]
+    #[case(String::from("hello"))]
+    #[case("42".to_string())]
+    fn should_not_be_empty(#[case] input: String) {
+        input.should().not_be_empty();
+    }
+
 }

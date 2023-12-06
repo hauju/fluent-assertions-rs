@@ -10,4 +10,7 @@ fn main() {
 
     let is_verified = true;
     is_verified.should().be_true();
+
+    let anwser = 42;
+    anwser.should().be_greater_than(40);
 }

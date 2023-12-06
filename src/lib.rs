@@ -5,7 +5,7 @@ pub use assertions::*;
 
 #[cfg(test)]
 mod tests {
-    use crate::assertions::{ShouldString, ShouldBool};
+    use crate::assertions::*;
 
     #[test]
     fn test_str_assertions() {
