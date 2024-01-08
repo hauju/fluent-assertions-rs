@@ -1,7 +1,15 @@
-
+use crate::Should;
 
 pub struct OptionAssertion<T> {
     value: Option<T>,
+}
+
+impl <T> Should for Option<T> {
+    type Assertion = OptionAssertion<T>;
+
+    fn should(self) -> OptionAssertion<T> {
+        OptionAssertion::new(self)
+    }
 }
 
 impl <T> OptionAssertion<T> {
@@ -23,7 +31,7 @@ impl <T> OptionAssertion<T> {
 #[cfg(test)]
 mod tests {
     use rstest::*;
-    use crate::assertions::ShouldOption;
+    use crate::assertions::*;
 
     #[rstest]
     #[case(None)]

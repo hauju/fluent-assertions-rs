@@ -1,6 +1,24 @@
+use crate::Should;
+
 
 pub struct StringAssertion<T: AsRef<str>> {
     value: T,
+}
+
+impl Should for String {
+    type Assertion = StringAssertion<String>;
+
+    fn should(self) -> StringAssertion<String> {
+        StringAssertion::new(self)
+    }
+}
+
+impl Should for &str {
+    type Assertion = StringAssertion<String>;
+
+    fn should(self) -> StringAssertion<String> {
+        StringAssertion::new(self.to_string())
+    }
 }
 
 impl<T: AsRef<str>> StringAssertion<T> {
@@ -88,8 +106,7 @@ impl<T: AsRef<str>> StringAssertion<T> {
 #[cfg(test)]
 mod tests {
     use rstest::*;
-
-    use crate::assertions::ShouldString;
+    use crate::assertions::*;
 
     #[test]
     fn test_str_assertions() {

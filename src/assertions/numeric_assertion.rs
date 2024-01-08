@@ -2,8 +2,106 @@ use std::cmp::PartialOrd;
 use std::fmt::Display;
 use num_traits::Zero;
 
+use crate::Should;
+
 pub struct NumericAssertion<T: PartialOrd + Display> {
     value: T,
+}
+
+impl Should for f64 {
+    type Assertion = NumericAssertion<f64>;
+
+    fn should(self) -> NumericAssertion<f64> {
+        NumericAssertion::new(self)
+    }
+}
+
+impl Should for f32 {
+    type Assertion = NumericAssertion<f32>;
+
+    fn should(self) -> NumericAssertion<f32> {
+        NumericAssertion::new(self)
+    }
+}
+
+impl Should for usize {
+    type Assertion = NumericAssertion<usize>;
+
+    fn should(self) -> NumericAssertion<usize> {
+        NumericAssertion::new(self)
+    }
+}
+
+impl Should for u64 {
+    type Assertion = NumericAssertion<u64>;
+
+    fn should(self) -> NumericAssertion<u64> {
+        NumericAssertion::new(self)
+    }
+}
+
+impl Should for u32 {
+    type Assertion = NumericAssertion<u32>;
+
+    fn should(self) -> NumericAssertion<u32> {
+        NumericAssertion::new(self)
+    }
+}
+
+impl Should for u16 {
+    type Assertion = NumericAssertion<u16>;
+
+    fn should(self) -> NumericAssertion<u16> {
+        NumericAssertion::new(self)
+    }
+}
+
+impl Should for u8 {
+    type Assertion = NumericAssertion<u8>;
+
+    fn should(self) -> NumericAssertion<u8> {
+        NumericAssertion::new(self)
+    }
+}
+
+impl Should for isize {
+    type Assertion = NumericAssertion<isize>;
+
+    fn should(self) -> NumericAssertion<isize> {
+        NumericAssertion::new(self)
+    }
+}
+
+impl Should for i64 {
+    type Assertion = NumericAssertion<i64>;
+
+    fn should(self) -> NumericAssertion<i64> {
+        NumericAssertion::new(self)
+    }
+}
+
+impl Should for i32 {
+    type Assertion = NumericAssertion<i32>;
+
+    fn should(self) -> NumericAssertion<i32> {
+        NumericAssertion::new(self)
+    }
+}
+
+impl Should for i16 {
+    type Assertion = NumericAssertion<i16>;
+
+    fn should(self) -> NumericAssertion<i16> {
+        NumericAssertion::new(self)
+    } 
+}
+
+impl Should for i8 {
+    type Assertion = NumericAssertion<i8>;
+
+    fn should(self) -> NumericAssertion<i8> {
+        NumericAssertion::new(self)
+    }
 }
 
 impl<T> NumericAssertion<T>
@@ -74,7 +172,7 @@ T: PartialOrd + Display + Zero + Copy,
 #[cfg(test)]
 mod tests {
     use rstest::*;
-    use crate::assertions::ShouldNumeric;
+    use crate::assertions::*;
 
     #[rstest]
     #[case(43, 42)]

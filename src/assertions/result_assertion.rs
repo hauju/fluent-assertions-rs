@@ -1,7 +1,17 @@
+use crate::Should;
+
 
 
 pub struct ResultAssertion<T, E> {
     value: Result<T, E>,
+}
+
+impl <T, E> Should for Result<T, E> {
+    type Assertion = ResultAssertion<T, E>;
+
+    fn should(self) -> ResultAssertion<T, E> {
+        ResultAssertion::new(self)
+    }
 }
 
 impl <T, E> ResultAssertion<T, E> {
@@ -26,7 +36,8 @@ impl <T, E> ResultAssertion<T, E> {
 #[cfg(test)]
 mod tests {
     use rstest::*;
-    use crate::assertions::ShouldResult;
+    use crate::assertions::*;
+
 
     #[rstest]
     #[case(Ok(42))]

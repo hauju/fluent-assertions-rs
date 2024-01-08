@@ -1,5 +1,15 @@
+use crate::Should;
+
 pub struct BoolAssertion {
     value: bool,
+}
+
+impl Should for bool {
+    type Assertion = BoolAssertion;
+
+    fn should(self) -> BoolAssertion {
+        BoolAssertion::new(self)
+    }
 }
 
 impl BoolAssertion {
@@ -40,7 +50,7 @@ impl BoolAssertion {
 
 #[cfg(test)]
 mod tests {
-    use crate::assertions::ShouldBool;
+    use crate::assertions::*;
 
     #[test]
     fn test_bool_assertions() {
