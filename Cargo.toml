@@ -1,6 +1,6 @@
 [package]
 name = "fluent-assertions"
-version = "0.2.1"
+version = "0.3.0"
 authors = ["Hauke Jung <hauke.jung@outlook.de>"]
 documentation = "https://docs.rs/fluent-assertions"
 repository = "https://github.com/hauju/fluent-assertions-rs.git"
