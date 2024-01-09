@@ -2,24 +2,106 @@ use std::cmp::PartialOrd;
 use std::fmt::Display;
 use num_traits::Zero;
 
-pub trait ShouldNumeric {
-    type Assertion;
-    fn should(self) -> Self::Assertion;
+use crate::Should;
+
+pub struct NumericAssertion<T: PartialOrd + Display> {
+    value: T,
 }
 
-impl<T> ShouldNumeric for T
-where
-    T: PartialOrd + Display + Copy + num_traits::Zero,
-{
-    type Assertion = NumericAssertion<T>;
+impl Should for f64 {
+    type Assertion = NumericAssertion<f64>;
 
-    fn should(self) -> NumericAssertion<T> {
+    fn should(self) -> NumericAssertion<f64> {
         NumericAssertion::new(self)
     }
 }
 
-pub struct NumericAssertion<T: PartialOrd + Display> {
-    value: T,
+impl Should for f32 {
+    type Assertion = NumericAssertion<f32>;
+
+    fn should(self) -> NumericAssertion<f32> {
+        NumericAssertion::new(self)
+    }
+}
+
+impl Should for usize {
+    type Assertion = NumericAssertion<usize>;
+
+    fn should(self) -> NumericAssertion<usize> {
+        NumericAssertion::new(self)
+    }
+}
+
+impl Should for u64 {
+    type Assertion = NumericAssertion<u64>;
+
+    fn should(self) -> NumericAssertion<u64> {
+        NumericAssertion::new(self)
+    }
+}
+
+impl Should for u32 {
+    type Assertion = NumericAssertion<u32>;
+
+    fn should(self) -> NumericAssertion<u32> {
+        NumericAssertion::new(self)
+    }
+}
+
+impl Should for u16 {
+    type Assertion = NumericAssertion<u16>;
+
+    fn should(self) -> NumericAssertion<u16> {
+        NumericAssertion::new(self)
+    }
+}
+
+impl Should for u8 {
+    type Assertion = NumericAssertion<u8>;
+
+    fn should(self) -> NumericAssertion<u8> {
+        NumericAssertion::new(self)
+    }
+}
+
+impl Should for isize {
+    type Assertion = NumericAssertion<isize>;
+
+    fn should(self) -> NumericAssertion<isize> {
+        NumericAssertion::new(self)
+    }
+}
+
+impl Should for i64 {
+    type Assertion = NumericAssertion<i64>;
+
+    fn should(self) -> NumericAssertion<i64> {
+        NumericAssertion::new(self)
+    }
+}
+
+impl Should for i32 {
+    type Assertion = NumericAssertion<i32>;
+
+    fn should(self) -> NumericAssertion<i32> {
+        NumericAssertion::new(self)
+    }
+}
+
+impl Should for i16 {
+    type Assertion = NumericAssertion<i16>;
+
+    fn should(self) -> NumericAssertion<i16> {
+        NumericAssertion::new(self)
+    } 
+}
+
+impl Should for i8 {
+    type Assertion = NumericAssertion<i8>;
+
+    fn should(self) -> NumericAssertion<i8> {
+        NumericAssertion::new(self)
+    }
 }
 
 impl<T> NumericAssertion<T>
@@ -89,41 +171,38 @@ T: PartialOrd + Display + Zero + Copy,
 
 #[cfg(test)]
 mod tests {
-    use crate::numeric_assertion::ShouldNumeric;
+    use rstest::*;
+    use crate::assertions::*;
 
-    #[test]
-    fn test_num_assertions() {
-        let actual = 42_u8;
-        actual
-            .should()
-            .be_greater_than(42)
+    #[rstest]
+    #[case(43, 42)]
+    #[case(1, 0)]
+    fn should_be_greater_and_positive(#[case] input: isize, #[case] value: isize) {
+        input.should()
+            .be_greater_than(value)
             .be_positive();
     }
 
-    #[test]
-    fn test_negativ_num_assertions() {
-        let actual = -42_i8;
-        actual
+    #[rstest]
+    #[case(42.0, 41.99)]
+    #[case(1.0, 0.9)]
+    fn should_be_greater_f64(#[case] input: f64, #[case] value: f64) {
+        input
+            .should()
+            .be_greater_than(value);
+    }
+
+    #[rstest]
+    #[case(-42)]
+    #[case(-3)]
+    fn should_be_negative_i8(#[case] input: i8) {
+        input
             .should()
             .be_greater_than(-43)
             .be_negative()
             .not_be(32)
-            .be(-42);
+            .be(input);
     }
 
-    #[test]
-    fn test_int_assertions() {
-        let actual = 42_i32;
-        actual
-            .should()
-            .be_greater_than(42);
-    }
-
-    #[test]
-    fn test_float_assertions() {
-        let actual = 42.0;
-        actual
-            .should()
-            .be_greater_than(41.99);
-    }
+    
 }

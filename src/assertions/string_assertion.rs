@@ -1,6 +1,24 @@
+use crate::Should;
+
 
 pub struct StringAssertion<T: AsRef<str>> {
     value: T,
+}
+
+impl Should for String {
+    type Assertion = StringAssertion<String>;
+
+    fn should(self) -> StringAssertion<String> {
+        StringAssertion::new(self)
+    }
+}
+
+impl Should for &str {
+    type Assertion = StringAssertion<String>;
+
+    fn should(self) -> StringAssertion<String> {
+        StringAssertion::new(self.to_string())
+    }
 }
 
 impl<T: AsRef<str>> StringAssertion<T> {
@@ -14,6 +32,33 @@ impl<T: AsRef<str>> StringAssertion<T> {
             "Expected string to be '{}', but got '{}'",
             expected,
             self.value.as_ref()
+        );
+        self
+    }
+
+    pub fn not_be(&self, expected: &str) -> &Self {
+        assert!(
+            self.value.as_ref() != expected,
+            "Expected string to not be '{}', but got '{}'",
+            expected,
+            self.value.as_ref()
+        );
+        self
+    }
+
+    pub fn be_empty(&self) -> &Self {
+        assert!(
+            self.value.as_ref().is_empty(),
+            "Expected string to be empty, but got '{}'",
+            self.value.as_ref()
+        );
+        self
+    }
+
+    pub fn not_be_empty(&self) -> &Self {
+        assert!(
+            !self.value.as_ref().is_empty(),
+            "Expected string to not be empty, but got empty string"
         );
         self
     }
@@ -60,7 +105,8 @@ impl<T: AsRef<str>> StringAssertion<T> {
 
 #[cfg(test)]
 mod tests {
-    use crate::assertions::ShouldString;
+    use rstest::*;
+    use crate::assertions::*;
 
     #[test]
     fn test_str_assertions() {
@@ -83,4 +129,20 @@ mod tests {
             .contain("EF")
             .have_length(9);
     }
+
+    #[rstest]
+    #[case(String::default())]
+    #[case(String::from(""))]
+    #[case("".to_string())]
+    fn should_be_empty(#[case] input: String) {
+        input.should().be_empty();
+    }
+
+    #[rstest]
+    #[case(String::from("hello"))]
+    #[case("42".to_string())]
+    fn should_not_be_empty(#[case] input: String) {
+        input.should().not_be_empty();
+    }
+
 }
