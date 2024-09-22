@@ -1,6 +1,6 @@
 [package]
 name = "fluent-assertions"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["Hauke Jung <hauke.jung@outlook.de>"]
 documentation = "https://docs.rs/fluent-assertions"
 repository = "https://github.com/hauju/fluent-assertions-rs.git"
@@ -14,7 +14,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-num-traits = "0.2"
+num-traits = "0.2.19"
 
 [dev-dependencies]
-rstest = "0.18.2"
+rstest = "0.22.0"

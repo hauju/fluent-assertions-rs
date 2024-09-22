@@ -1,27 +1,26 @@
-use crate::Should;
+use super::Assertion;
+use std::fmt::Debug;
 
-pub struct OptionAssertion<T> {
-    value: Option<T>,
-}
-
-impl <T> Should for Option<T> {
-    type Assertion = OptionAssertion<T>;
-
-    fn should(self) -> OptionAssertion<T> {
-        OptionAssertion::new(self)
-    }
-}
-
-impl <T> OptionAssertion<T> {
-    pub fn new(value: Option<T>) -> Self {
-        OptionAssertion { value }
-    }
-
+impl<T: Debug + PartialEq> Assertion<Option<T>> {
+    /// Asserts that the Option is Some
     pub fn be_some(&self) -> &Self {
         assert!(self.value.is_some(), "Expected Some, but got None");
         self
     }
 
+    /// Asserts that the Option is Some and contains the expected value
+    pub fn contains(&self, expected: &T) -> &Self {
+        assert_eq!(
+            self.value.as_ref(),
+            Some(expected),
+            "Expected Some({:?}), but was {:?}",
+            expected,
+            self.value
+        );
+        self
+    }
+
+    /// Asserts that the Option is None
     pub fn be_none(&self) -> &Self {
         assert!(self.value.is_none(), "Expected None, but got Some");
         self
@@ -30,21 +29,33 @@ impl <T> OptionAssertion<T> {
 
 #[cfg(test)]
 mod tests {
-    use rstest::*;
     use crate::assertions::*;
+    use rstest::*;
 
     #[rstest]
     #[case(None)]
     fn should_be_none(#[case] input: Option<String>) {
-        input.should()
-            .be_none();
+        input.should().be_none();
     }
 
     #[rstest]
-    #[case(Some(42f64))]
-    #[case(Some(0.0))]
-    fn should_be_some(#[case] input: Option<f64>) {
-        input.should()
-            .be_some();
+    #[case(42f64)]
+    #[case(0.0)]
+    fn should_be_some(#[case] expected: f64) {
+        let input = Some(expected);
+        input.should().be_some().contains(&expected);
+    }
+
+    #[rstest]
+    #[case("hello")]
+    fn should_contain(#[case] expected: &str) {
+        let input = Some(expected);
+        input.should().be_some().contains(&expected);
+    }
+
+    #[rstest]
+    #[case(Some(String::from("hello")))]
+    fn should_contain_string(#[case] input: Option<String>) {
+        input.should().be_some().contains(&String::from("hello"));
     }
 }
