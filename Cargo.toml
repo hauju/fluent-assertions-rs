@@ -7,7 +7,7 @@ repository = "https://github.com/hauju/fluent-assertions-rs.git"
 license = "MIT OR Apache-2.0"
 description = "A Rust testing library that enhances readability and expressiveness by enabling natural language-like syntax for test assertions."
 keywords = ["assertions", "fluent", "testing"]
-categories = ["testing"]
+categories = ["development-tools"]
 readme = "README.md"
 edition = "2021"
 
