@@ -3,7 +3,8 @@ use crate::Assertion;
 /// Specific assertions for strings
 impl<T: AsRef<str>> Assertion<T> {
     /// Asserts that the string is empty
-    pub fn be_empty(&self) -> &Self {
+    #[track_caller]
+    pub fn be_empty(self) -> Self {
         assert!(
             self.value.as_ref().is_empty(),
             "Expected string to be empty, but got '{}'",
@@ -12,7 +13,8 @@ impl<T: AsRef<str>> Assertion<T> {
         self
     }
     /// Asserts that the string is not empty
-    pub fn not_be_empty(&self) -> &Self {
+    #[track_caller]
+    pub fn not_be_empty(self) -> Self {
         assert!(
             !self.value.as_ref().is_empty(),
             "Expected string to not be empty, but got empty string"
@@ -20,28 +22,31 @@ impl<T: AsRef<str>> Assertion<T> {
         self
     }
     /// Asserts that the string starts with a given prefix
-    pub fn start_with(&self, prefix: &str) -> &Self {
+    #[track_caller]
+    pub fn start_with(self, prefix: &str) -> Self {
         assert!(
             self.value.as_ref().starts_with(prefix),
-            "Expected string to start with '{}', but it started with '{}'",
+            "Expected string to start with '{}', but got '{}'",
             prefix,
-            &self.value.as_ref()[0..prefix.len()]
+            self.value.as_ref()
         );
         self
     }
     /// Asserts that the string ends with a given suffix
-    pub fn end_with(&self, suffix: &str) -> &Self {
+    #[track_caller]
+    pub fn end_with(self, suffix: &str) -> Self {
         assert!(
             self.value.as_ref().ends_with(suffix),
-            "Expected string to end with '{}', but it ended with '{}'",
+            "Expected string to end with '{}', but got '{}'",
             suffix,
-            &self.value.as_ref()[self.value.as_ref().len() - suffix.len()..]
+            self.value.as_ref()
         );
         self
     }
 
     /// Asserts that the string contains a given substring
-    pub fn contain(&self, substring: &str) -> &Self {
+    #[track_caller]
+    pub fn contain(self, substring: &str) -> Self {
         assert!(
             self.value.as_ref().contains(substring),
             "Expected string to contain '{}', but it didn't",
@@ -51,7 +56,12 @@ impl<T: AsRef<str>> Assertion<T> {
     }
 
     /// Asserts that the string has a given length
-    pub fn have_length(&self, length: usize) -> &Self {
+    ///
+    /// The length is measured with [`str::len`], i.e. the number of bytes,
+    /// not the number of characters. For strings containing multi-byte
+    /// UTF-8 characters these two counts differ.
+    #[track_caller]
+    pub fn have_length(self, length: usize) -> Self {
         assert!(
             self.value.as_ref().len() == length,
             "Expected string to have length {}, but it had length {}",
@@ -109,5 +119,23 @@ mod tests {
     #[case("42")]
     fn should_be(#[case] input: &str) {
         input.should().be(input);
+    }
+
+    #[test]
+    #[should_panic(expected = "Expected string to start with 'hello'")]
+    fn start_with_panics_when_actual_shorter_than_prefix() {
+        "hi".should().start_with("hello");
+    }
+
+    #[test]
+    #[should_panic(expected = "Expected string to end with 'world'")]
+    fn end_with_panics_when_actual_shorter_than_suffix() {
+        "hi".should().end_with("world");
+    }
+
+    #[test]
+    #[should_panic(expected = "Expected string to start with")]
+    fn start_with_panics_on_multibyte_actual() {
+        "é".should().start_with("prefix");
     }
 }

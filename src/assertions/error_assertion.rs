@@ -5,6 +5,7 @@ use std::fmt::Debug;
 // Specific assertions for Error types
 impl<E: Error> Assertion<E> {
     /// Asserts that the error is equal to the given error
+    #[track_caller]
     pub fn match_error<T: Error + Debug>(self, error: T) -> Self {
         assert!(
             self.value.to_string() == error.to_string(),
@@ -16,6 +17,7 @@ impl<E: Error> Assertion<E> {
     }
 
     /// Asserts that the error message contains the given message
+    #[track_caller]
     pub fn contain_message(self, expected_message: &str) -> Self {
         let error_message = self.value.to_string();
         assert!(

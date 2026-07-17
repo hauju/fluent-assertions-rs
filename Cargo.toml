@@ -1,6 +1,6 @@
 [package]
 name = "fluent-assertions"
-version = "0.4.0"
+version = "0.5.0"
 authors = ["Hauke Jung <hauke.jung@outlook.de>"]
 documentation = "https://docs.rs/fluent-assertions"
 repository = "https://github.com/hauju/fluent-assertions-rs.git"
@@ -9,7 +9,8 @@ description = "A Rust testing library that enhances readability and expressivene
 keywords = ["assertions", "fluent", "testing"]
 categories = ["development-tools"]
 readme = "README.md"
-edition = "2021"
+edition = "2024"
+rust-version = "1.85"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -17,4 +18,4 @@ edition = "2021"
 num-traits = "0.2.19"
 
 [dev-dependencies]
-rstest = "0.22.0"
+rstest = "0.26.1"

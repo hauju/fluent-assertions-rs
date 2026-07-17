@@ -2,14 +2,18 @@ use super::Assertion;
 use std::fmt::Debug;
 
 impl<T: Debug + PartialEq> Assertion<Option<T>> {
-    /// Asserts that the Option is Some
-    pub fn be_some(&self) -> &Self {
-        assert!(self.value.is_some(), "Expected Some, but got None");
-        self
+    /// Asserts that the Option is Some and unwraps it into an `Assertion<T>`
+    #[track_caller]
+    pub fn be_some(self) -> Assertion<T> {
+        match self.value {
+            Some(value) => Assertion { value },
+            None => panic!("Expected Some, but got None"),
+        }
     }
 
     /// Asserts that the Option is Some and contains the expected value
-    pub fn contains(&self, expected: &T) -> &Self {
+    #[track_caller]
+    pub fn contains(self, expected: &T) -> Self {
         assert_eq!(
             self.value.as_ref(),
             Some(expected),
@@ -21,8 +25,13 @@ impl<T: Debug + PartialEq> Assertion<Option<T>> {
     }
 
     /// Asserts that the Option is None
-    pub fn be_none(&self) -> &Self {
-        assert!(self.value.is_none(), "Expected None, but got Some");
+    #[track_caller]
+    pub fn be_none(self) -> Self {
+        assert!(
+            self.value.is_none(),
+            "Expected None, but got {:?}",
+            self.value
+        );
         self
     }
 }
@@ -43,19 +52,25 @@ mod tests {
     #[case(0.0)]
     fn should_be_some(#[case] expected: f64) {
         let input = Some(expected);
-        input.should().be_some().contains(&expected);
+        input.should().be_some().be(expected);
     }
 
     #[rstest]
     #[case("hello")]
     fn should_contain(#[case] expected: &str) {
         let input = Some(expected);
-        input.should().be_some().contains(&expected);
+        input.should().contains(&expected);
     }
 
     #[rstest]
     #[case(Some(String::from("hello")))]
     fn should_contain_string(#[case] input: Option<String>) {
-        input.should().be_some().contains(&String::from("hello"));
+        input.should().contains(&String::from("hello"));
+    }
+
+    #[test]
+    #[should_panic(expected = "Expected None, but got Some(42)")]
+    fn be_none_panics_with_actual_value() {
+        Some(42).should().be_none();
     }
 }

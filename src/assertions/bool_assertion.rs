@@ -3,12 +3,14 @@ use super::Assertion;
 /// Specific assertions for booleans
 impl Assertion<bool> {
     /// Asserts that the value is true
+    #[track_caller]
     pub fn be_true(self) -> Self {
         assert!(self.value, "Expected true, but got false");
         self
     }
 
     /// Asserts that the value is false
+    #[track_caller]
     pub fn be_false(self) -> Self {
         assert!(!self.value, "Expected false, but got true");
         self

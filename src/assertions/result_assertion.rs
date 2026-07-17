@@ -8,6 +8,7 @@ where
     E: Debug,
 {
     /// Asserts that the Result is Ok
+    #[track_caller]
     pub fn be_ok(self) -> Assertion<T> {
         match self.value {
             Ok(value) => Assertion { value },
@@ -16,6 +17,7 @@ where
     }
 
     /// Asserts that the Result is Err
+    #[track_caller]
     pub fn be_err(self) -> Assertion<E> {
         match self.value {
             Ok(v) => panic!("Expected Err, but got Ok({:?})", v),

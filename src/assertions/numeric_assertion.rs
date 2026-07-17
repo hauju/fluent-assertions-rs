@@ -9,7 +9,8 @@ where
     T: PartialOrd + Display + Zero + Copy,
 {
     /// Asserts that the value is greater than or equal to the given value
-    pub fn be_greater_than_or_equal_to(&self, other: T) -> &Self {
+    #[track_caller]
+    pub fn be_greater_than_or_equal_to(self, other: T) -> Self {
         assert!(
             self.value >= other,
             "Expected value to be greater than or equal to {}, but got {}",
@@ -20,7 +21,8 @@ where
     }
 
     /// Asserts that the value is greater than the given value
-    pub fn be_greater_than(&self, other: T) -> &Self {
+    #[track_caller]
+    pub fn be_greater_than(self, other: T) -> Self {
         assert!(
             self.value > other,
             "Expected value to be greater than {}, but got {}",
@@ -31,7 +33,8 @@ where
     }
 
     /// Asserts that the value is less than or equal to the given value
-    pub fn be_less_than_or_equal_to(&self, other: T) -> &Self {
+    #[track_caller]
+    pub fn be_less_than_or_equal_to(self, other: T) -> Self {
         assert!(
             self.value <= other,
             "Expected value to be less than or equal to {}, but got {}",
@@ -42,7 +45,8 @@ where
     }
 
     /// Asserts that the value is less than the given value
-    pub fn be_less_than(&self, other: T) -> &Self {
+    #[track_caller]
+    pub fn be_less_than(self, other: T) -> Self {
         assert!(
             self.value < other,
             "Expected value to be less than {}, but got {}",
@@ -53,7 +57,8 @@ where
     }
 
     /// Asserts that the value is positive
-    pub fn be_positive(&self) -> &Self {
+    #[track_caller]
+    pub fn be_positive(self) -> Self {
         assert!(
             self.value > T::zero(),
             "Expected positive value, but found {}",
@@ -63,7 +68,8 @@ where
     }
 
     /// Asserts that the value is negative
-    pub fn be_negative(&self) -> &Self {
+    #[track_caller]
+    pub fn be_negative(self) -> Self {
         assert!(
             self.value < T::zero(),
             "Expected negative value, but found {}",
@@ -73,7 +79,8 @@ where
     }
 
     /// Asserts that the value is in the given range
-    pub fn be_in_range(&self, start: T, end: T) -> &Self {
+    #[track_caller]
+    pub fn be_in_range(self, start: T, end: T) -> Self {
         assert!(
             self.value >= start && self.value <= end,
             "Expected value to be in range {}-{}, but got {}",
@@ -85,7 +92,8 @@ where
     }
 
     /// Asserts that the value is not in the given range
-    pub fn not_be_in_range(&self, start: T, end: T) -> &Self {
+    #[track_caller]
+    pub fn not_be_in_range(self, start: T, end: T) -> Self {
         assert!(
             self.value < start || self.value > end,
             "Expected value to not be in range {}-{}, but got {}",
