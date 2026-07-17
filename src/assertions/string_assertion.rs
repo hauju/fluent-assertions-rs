@@ -3,6 +3,13 @@ use crate::Assertion;
 /// Specific assertions for strings
 impl<T: AsRef<str>> Assertion<T> {
     /// Asserts that the string is empty
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use fluent_assertions::*;
+    /// "".should().be_empty();
+    /// ```
     #[track_caller]
     pub fn be_empty(self) -> Self {
         assert!(
@@ -13,6 +20,13 @@ impl<T: AsRef<str>> Assertion<T> {
         self
     }
     /// Asserts that the string is not empty
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use fluent_assertions::*;
+    /// "hello".should().not_be_empty();
+    /// ```
     #[track_caller]
     pub fn not_be_empty(self) -> Self {
         assert!(
@@ -22,6 +36,13 @@ impl<T: AsRef<str>> Assertion<T> {
         self
     }
     /// Asserts that the string starts with a given prefix
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use fluent_assertions::*;
+    /// "hello world".should().start_with("hello");
+    /// ```
     #[track_caller]
     pub fn start_with(self, prefix: &str) -> Self {
         assert!(
@@ -33,6 +54,13 @@ impl<T: AsRef<str>> Assertion<T> {
         self
     }
     /// Asserts that the string ends with a given suffix
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use fluent_assertions::*;
+    /// "hello world".should().end_with("world");
+    /// ```
     #[track_caller]
     pub fn end_with(self, suffix: &str) -> Self {
         assert!(
@@ -45,6 +73,13 @@ impl<T: AsRef<str>> Assertion<T> {
     }
 
     /// Asserts that the string contains a given substring
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use fluent_assertions::*;
+    /// "hello world".should().contain("lo wo");
+    /// ```
     #[track_caller]
     pub fn contain(self, substring: &str) -> Self {
         assert!(
@@ -60,6 +95,15 @@ impl<T: AsRef<str>> Assertion<T> {
     /// The length is measured with [`str::len`], i.e. the number of bytes,
     /// not the number of characters. For strings containing multi-byte
     /// UTF-8 characters these two counts differ.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use fluent_assertions::*;
+    /// "hello".should().have_length(5);
+    /// // Bytes, not chars: 'é' is a two-byte UTF-8 sequence.
+    /// "é".should().have_length(2);
+    /// ```
     #[track_caller]
     pub fn have_length(self, length: usize) -> Self {
         assert!(

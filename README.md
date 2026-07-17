@@ -1,3 +1,8 @@
+# fluent-assertions
+
+[![crates.io](https://img.shields.io/crates/v/fluent-assertions.svg)](https://crates.io/crates/fluent-assertions)
+[![docs.rs](https://docs.rs/fluent-assertions/badge.svg)](https://docs.rs/fluent-assertions)
+[![CI](https://github.com/hauju/fluent-assertions-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/hauju/fluent-assertions-rs/actions/workflows/ci.yml)
 
 ## Introduction
 
@@ -22,24 +27,30 @@ Bring the prelude into scope and call `.should()` on any supported value to star
 ```rust
 use fluent_assertions::*;
 
-// Strings
+// Strings — chained checks (have_length counts bytes, not chars)
 "hello world".should().start_with("hello").contain("world").have_length(11);
 
-// Numbers
+// Cross-type equality: a String compared against a &str
+"foo".to_string().should().be("foo");
+
+// Numbers, ranges and floats (be_close_to tolerance is inclusive)
 42.should().be_greater_than(40).be_positive();
+5.should().be_in_range(1..=10);
+3.14.should().be_close_to(3.1, 0.05);
 
 // Booleans
 true.should().be_true();
 
-// Options
-Some(5).should().be_some();
+// Collections: Vec, arrays and slices
+[1, 2, 3].should().contain(&2).have_length(3);
+
+// Options and Results: be_some()/be_ok() unwrap, into_inner() returns the value
+let five = Some(5).should().be_some().into_inner();
+five.should().be(5);
+Ok::<i32, String>(42).should().be_ok().into_inner().should().be(42);
 None::<i32>.should().be_none();
 
-// Results: be_ok() yields an assertion on the Ok value,
-// be_err() yields an assertion on the error value.
-let ok: Result<i32, String> = Ok(42);
-ok.should().be_ok();
-
+// Errors: be_err() unwraps the error so you can keep asserting on it
 let err: Result<(), std::io::Error> = Err(std::io::Error::other("boom"));
 err.should().be_err().contain_message("boom");
 ```

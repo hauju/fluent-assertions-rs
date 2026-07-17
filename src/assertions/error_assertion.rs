@@ -5,6 +5,15 @@ use std::fmt::Debug;
 // Specific assertions for Error types
 impl<E: Error> Assertion<E> {
     /// Asserts that the error is equal to the given error
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use fluent_assertions::*;
+    /// std::io::Error::other("boom")
+    ///     .should()
+    ///     .match_error(std::io::Error::other("boom"));
+    /// ```
     #[track_caller]
     pub fn match_error<T: Error + Debug>(self, error: T) -> Self {
         assert!(
@@ -17,6 +26,13 @@ impl<E: Error> Assertion<E> {
     }
 
     /// Asserts that the error message contains the given message
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use fluent_assertions::*;
+    /// std::io::Error::other("boom happened").should().contain_message("boom");
+    /// ```
     #[track_caller]
     pub fn contain_message(self, expected_message: &str) -> Self {
         let error_message = self.value.to_string();

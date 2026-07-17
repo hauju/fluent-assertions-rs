@@ -8,6 +8,13 @@ where
     E: Debug,
 {
     /// Asserts that the Result is Ok
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use fluent_assertions::*;
+    /// Ok::<i32, String>(42).should().be_ok().be(42);
+    /// ```
     #[track_caller]
     pub fn be_ok(self) -> Assertion<T> {
         match self.value {
@@ -17,6 +24,13 @@ where
     }
 
     /// Asserts that the Result is Err
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use fluent_assertions::*;
+    /// Err::<i32, String>("boom".to_string()).should().be_err().be("boom");
+    /// ```
     #[track_caller]
     pub fn be_err(self) -> Assertion<E> {
         match self.value {

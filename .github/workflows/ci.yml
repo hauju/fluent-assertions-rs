@@ -16,6 +16,9 @@ jobs:
         with:
           components: clippy, rustfmt
 
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+
       - name: Check formatting
         run: cargo fmt --all -- --check
 
@@ -27,3 +30,20 @@ jobs:
 
       - name: Run tests
         run: cargo test --verbose
+
+  msrv:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Install rust 1.85
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: "1.85"
+
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+
+      - name: Run tests
+        run: cargo test

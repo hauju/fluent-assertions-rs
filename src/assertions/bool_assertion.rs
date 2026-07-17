@@ -3,6 +3,13 @@ use super::Assertion;
 /// Specific assertions for booleans
 impl Assertion<bool> {
     /// Asserts that the value is true
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use fluent_assertions::*;
+    /// true.should().be_true();
+    /// ```
     #[track_caller]
     pub fn be_true(self) -> Self {
         assert!(self.value, "Expected true, but got false");
@@ -10,6 +17,13 @@ impl Assertion<bool> {
     }
 
     /// Asserts that the value is false
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use fluent_assertions::*;
+    /// false.should().be_false();
+    /// ```
     #[track_caller]
     pub fn be_false(self) -> Self {
         assert!(!self.value, "Expected false, but got true");
